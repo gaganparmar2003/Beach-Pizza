@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="cart.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+    </header>
+
+    <div id="cart-items"></div>
+
+    <script>
+        // Retrieve cart data from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const cartItemsParam = urlParams.get('cartItems');
+        const cartTotalParam = urlParams.get('cartTotal');
+
+        // Parse cart data if available
+        const cartItems = cartItemsParam ? JSON.parse(decodeURIComponent(cartItemsParam)) : {};
+        const cartTotal = cartTotalParam ? parseFloat(cartTotalParam) : 0;
+
+        // Display the cart items on the second page
+        function displayCartOnAnotherPage() {
+            const cartItemsElement = document.getElementById("cart-items");
+            cartItemsElement.innerHTML = "";
+
+            for (const itemName in cartItems) {
+                const item = cartItems[itemName];
+                if (item.quantity > 0) {
+                    const li = document.createElement("li");
+                    li.textContent = `${itemName} - Quantity: ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`;
+                    cartItemsElement.appendChild(li);
+                }
+            }
+
+            const cartTotalElement = document.getElementById("cart-total");
+            cartTotalElement.textContent = cartTotal.toFixed(2);
+        }
+
+        // Call this function to display cart items on the second page
+        displayCartOnAnotherPage();
+    </script>
+</body>
+
+</html>
